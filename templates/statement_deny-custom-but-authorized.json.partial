@@ -1,0 +1,18 @@
+        {
+            "Sid": "${sid}",
+            "Effect": "Deny",
+            "${principal}": ${principals},
+            "${action}": [
+                ${actions}
+            ],
+            "${resource}": [
+                ${resources}
+            ],
+            "Condition": {
+                "${user_condition}": {
+                    "aws:userId": [
+                        ${users}
+                    ]
+                }
+            }
+        }

@@ -1,0 +1,33 @@
+        {
+            "Sid": "CloudWatchGetACLs",
+            "Effect": "Allow",
+            "Principal": {
+                 "Service": "${cloudwatch}"
+            },
+            "Action": [
+                "s3:GetBucketAcl"
+            ],
+            "Resource": [
+                "${bucket_arn}"
+            ]
+        },
+        {
+            "Sid": "CloudWatchPushLogs",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "${cloudwatch}"
+            },
+            "Action": [
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "${bucket_arn}/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "s3:x-amz-acl": [
+                        "bucket-owner-full-control"
+                    ]
+                }
+            }
+        }

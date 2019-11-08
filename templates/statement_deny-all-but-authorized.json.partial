@@ -1,0 +1,17 @@
+        {
+            "Sid": "Deny all access for anyone not listed here",
+            "Effect": "Deny",
+            ${principal},
+            "Action": "*",
+            "Resource": [
+                "${bucket_arn}",
+                "${bucket_arn}/*"
+            ],
+            "Condition": {
+                "StringNotLike": {
+                    "aws:userId": [
+                        ${authorized_users}
+                    ]
+                }
+            }
+        }
