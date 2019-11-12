@@ -1,5 +1,0 @@
-"NotPrincipal": {
-                "${principal_type}": [
-                    ${authorized_principals}
-                ]
-            }

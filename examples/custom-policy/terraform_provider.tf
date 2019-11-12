@@ -9,7 +9,8 @@ variable "aws_profile" {
 
 # Specify the provider and access details
 provider "aws" {
-#  version    = "2.30.0"
-  region     = "${var.aws_region}"
-  profile    = "${var.aws_profile}"
+  #  version    = "2.30.0"
+  region  = var.aws_region
+  profile = var.aws_profile
 }
+
