@@ -1,5 +1,5 @@
-data "aws_caller_identity" "current" {
-}
+# Get the current caller identity
+data "aws_caller_identity" "current" {}
 
 # Create IAM users
 resource "aws_iam_user" "readonly" {
@@ -64,15 +64,16 @@ locals {
 
 # Create the bucket policy
 module "policy_custom" {
-  source           = "JousP/s3-bucket-policy/aws"
-  version          = "2.0.0"
-  bucket_arn       = aws_s3_bucket.policy_custom.arn
-  write_users      = [aws_iam_user.rw.unique_id, data.aws_caller_identity.current.user_id]
-  write_roles      = [aws_iam_role.rw.unique_id]
-  access_users     = [aws_iam_user.readonly.unique_id]
-  access_roles     = [aws_iam_role.readonly.unique_id]
-  access_principal = ["arn:aws:iam::122324294275:user/awslogs.prod.eu-west-1.s3_export", "arn:aws:iam::122324294275:root"]
-  extra_statements = [local.extra_policy]
+  source             = "JousP/s3-bucket-policy/aws"
+  version            = "2.1.0"
+  bucket_arn         = aws_s3_bucket.policy_custom.arn
+  admin_users_id     = [data.aws_caller_identity.current.user_id]
+  readwrite_users_id = [aws_iam_user.rw.unique_id]
+  readwrite_roles_id = [aws_iam_role.rw.unique_id]
+  readonly_users_id  = [aws_iam_user.readonly.unique_id]
+  readonly_roles_id  = [aws_iam_role.readonly.unique_id]
+  readonly_arns      = ["arn:aws:iam::122324294275:user/awslogs.prod.eu-west-1.s3_export", "arn:aws:iam::122324294275:root"]
+  extra_statements   = [local.extra_policy]
 }
 
 # Create the S3 bucket
