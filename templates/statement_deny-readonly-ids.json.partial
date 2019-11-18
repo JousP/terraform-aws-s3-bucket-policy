@@ -1,7 +1,7 @@
         {
-            "Sid": "Deny any action other than Get/List for anyone not listed here",
+            "Sid": "Deny any action other than Get/List for readonly users and roles",
             "Effect": "Deny",
-            ${principal},
+            "Principal": "*",
             "NotAction": [
                 "s3:Get*",
                 "s3:List*"
@@ -11,9 +11,9 @@
                 "${bucket_arn}/*"
             ],
             "Condition": {
-                "StringNotLike": {
+                "StringLike": {
                     "aws:userId": [
-                        ${authorized_users}
+                        ${readonly_ids}
                     ]
                 }
             }

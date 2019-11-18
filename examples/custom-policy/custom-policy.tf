@@ -1,19 +1,20 @@
+# Get the current caller identity
 data "aws_caller_identity" "current" {}
 
 # Create IAM users
 resource "aws_iam_user" "readonly" {
-  name = "readonly-user"
+  name          = "readonly-user"
   force_destroy = true
 }
 
 resource "aws_iam_user" "rw" {
-  name = "readwrite-user"
+  name          = "readwrite-user"
   force_destroy = true
 }
 
 # Create IAM Roles
 resource "aws_iam_role" "readonly" {
-  name = "readonly-role"
+  name               = "readonly-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -32,7 +33,7 @@ EOF
 }
 
 resource "aws_iam_role" "rw" {
-  name = "readwrite-role"
+  name               = "readwrite-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -51,24 +52,30 @@ EOF
 }
 
 # Create an extra statement
-data "template_file" "extra_policy" {
-  template     = "${file("./policies/cloudwatch.json.partial")}"
-  vars {
-    bucket_arn = "${aws_s3_bucket.policy_custom.arn}"
-    cloudwatch = "logs.${var.aws_region}.amazonaws.com"
+locals {
+  template_vars = {
+    bucket_arn  = "${aws_s3_bucket.policy_custom.arn}"
+    cloudwatch  = "logs.${var.aws_region}.amazonaws.com"
   }
 }
+
+data "template_file" "extra_policy" {
+  template = "${file("./policies/cloudwatch.json.partial")}"
+  vars     = "${local.template_vars}"
+}
+
 # Create the bucket policy
 module "policy_custom" {
-  source           = "JousP/s3-bucket-policy/aws"
-  version          = "1.0.0"
-  bucket_arn       = "${aws_s3_bucket.policy_custom.arn}"
-  write_users      = ["${aws_iam_user.rw.unique_id}", "${data.aws_caller_identity.current.user_id}"]
-  write_roles      = ["${aws_iam_role.rw.unique_id}"]
-  access_users     = ["${aws_iam_user.readonly.unique_id}"]
-  access_roles     = ["${aws_iam_role.readonly.unique_id}"]
-  access_principal = ["arn:aws:iam::122324294275:user/awslogs.prod.eu-west-1.s3_export", "arn:aws:iam::122324294275:root"]
-  extra_statements = ["${data.template_file.extra_policy.rendered}"]
+  source             = "JousP/s3-bucket-policy/aws"
+  version            = "1.1.0"
+  bucket_arn         = "${aws_s3_bucket.policy_custom.arn}"
+  admin_users_id     = ["${data.aws_caller_identity.current.user_id}"]
+  readwrite_users_id = ["${aws_iam_user.rw.unique_id}"]
+  readwrite_roles_id = ["${aws_iam_role.rw.unique_id}"]
+  readonly_users_id  = ["${aws_iam_user.readonly.unique_id}"]
+  readonly_roles_id  = ["${aws_iam_role.readonly.unique_id}"]
+  readonly_arns      = ["arn:aws:iam::122324294275:user/awslogs.prod.eu-west-1.s3_export", "arn:aws:iam::122324294275:root"]
+  extra_statements   = ["${data.template_file.extra_policy.rendered}"]
 }
 
 # Create the S3 bucket

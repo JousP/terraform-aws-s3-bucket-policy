@@ -1,39 +1,58 @@
 variable "bucket_arn" {
-  description = "(Required) Bucket for which we are building the policy"
+  description = "Bucket for which we are building the policy"
   type        = "string"
 }
 
 variable "force_encrypt" {
-  description = "Should we force encryption of anything uploaded?"
+  description = "Specifies whether the encryption of anything uploaded is forced"
+  
   default     = true
 }
 
-variable "write_users" {
-  description = "If specified, any rw access must be from a user from that list, or role form next."
+variable "admin_users_id" {
+  description = "A list of IAM users unique_id to grant administration access."
   type        = "list"
   default     = []
 }
 
-variable "write_roles" {
-  description = "If specified, any rw access must be from a user form prev list, or role from that list."
+variable "admin_roles_id" {
+  description = "A list of IAM roles unique_id to grant administration access."
   type        = "list"
   default     = []
 }
 
-variable "access_users" {
-  description = "If specified, any read access must be from a user from that list, or role form next"
+variable "readwrite_users_id" {
+  description = "A list of IAM users unique_id to grant read and write access."
   type        = "list"
   default     = []
 }
 
-variable "access_roles" {
-  description = "If specified, any read access must be from a user form prev list, or role from that list"
+variable "readwrite_roles_id" {
+  description = "A list of IAM roles unique_id to grant read and write access."
   type        = "list"
   default     = []
 }
 
-variable "access_principal" {
-  description = "If specified, any read access must be from a principal from that list"
+variable "readwrite_arn" {
+  description = "list of ARN to grant read and write access."
+  type        = "list"
+  default     = []
+}
+
+variable "readonly_users_id" {
+  description = "A list of IAM users unique_id to grant read only access."
+  type        = "list"
+  default     = []
+}
+
+variable "readonly_roles_id" {
+  description = "A list of IAM roles unique_id to grant read only access."
+  type        = "list"
+  default     = []
+}
+
+variable "readonly_arns" {
+  description = "list of ARN to grant read only access."
   type        = "list"
   default     = []
 }

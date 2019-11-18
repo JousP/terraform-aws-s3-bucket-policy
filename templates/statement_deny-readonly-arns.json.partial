@@ -1,0 +1,17 @@
+        {
+            "Sid": "Deny any action other than Get/List for readonly arns",
+            "Effect": "Deny",
+            "Principal": {
+                "AWS": [
+                    ${readonly_arns}
+                ]
+            },
+            "NotAction": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "${bucket_arn}",
+                "${bucket_arn}/*"
+            ]
+        }

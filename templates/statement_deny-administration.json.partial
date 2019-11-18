@@ -1,0 +1,31 @@
+        {
+            "Sid": "Deny administration access for non admin users and roles",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": [
+                "s3:DeleteObjectTagging",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:ReplicateTags",
+                "s3:PutObjectVersionTagging",
+                "s3:DeleteObjectVersionTagging",
+                "s3:DeleteBucketPolicy",
+                "s3:ObjectOwnerOverrideToBucketOwner",
+                "s3:PutBucketTagging",
+                "s3:PutObjectVersionAcl",
+                "s3:PutBucketAcl",
+                "s3:PutBucketPolicy",
+                "s3:PutObjectTagging",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "${bucket_arn}",
+                "${bucket_arn}/*"
+            ],
+            "Condition": {
+                "StringNotLike": {
+                    "aws:userId": [
+                        ${admin_ids}
+                    ]
+                }
+            }
+        }

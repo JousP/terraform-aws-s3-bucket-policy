@@ -1,11 +1,12 @@
+# Get the current caller identity
 data "aws_caller_identity" "current" {}
 
 # Create the bucket policy
 module "policy_basic" {
-  source      = "JousP/s3-bucket-policy/aws"
-  version     = "1.0.0"
-  bucket_arn  = "${aws_s3_bucket.policy_basic.arn}"
-  write_users = ["${data.aws_caller_identity.current.user_id}"]
+  source         = "JousP/s3-bucket-policy/aws"
+  version        = "1.1.0"
+  bucket_arn     = "${aws_s3_bucket.policy_basic.arn}"
+  admin_users_id = ["${data.aws_caller_identity.current.user_id}"]
 }
 
 # Create the S3 bucket

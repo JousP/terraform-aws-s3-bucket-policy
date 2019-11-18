@@ -10,7 +10,7 @@
             "Condition": {
                 "StringNotLike": {
                     "aws:userId": [
-                        ${authorized_users}
+                        ${ids}
                     ]
                 }
             }
