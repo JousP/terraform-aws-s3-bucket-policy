@@ -11,7 +11,10 @@
             "Resource": "${bucket_arn}/*",
             "Condition": {
                 "StringNotEquals": {
-                    "s3:x-amz-server-side-encryption": "AES256"
+                    "s3:x-amz-server-side-encryption": [
+                        "AES256",
+                        "aws:kms"
+                    ]
                 }
             }
         },
