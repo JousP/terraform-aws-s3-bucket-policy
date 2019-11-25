@@ -67,7 +67,7 @@ data "template_file" "extra_policy" {
 # Create the bucket policy
 module "policy_custom" {
   source             = "JousP/s3-bucket-policy/aws"
-  version            = "1.1.0"
+  version            = "1.1.1"
   bucket_arn         = "${aws_s3_bucket.policy_custom.arn}"
   admin_users_id     = ["${data.aws_caller_identity.current.user_id}"]
   readwrite_users_id = ["${aws_iam_user.rw.unique_id}"]
